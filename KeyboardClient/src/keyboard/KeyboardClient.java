@@ -36,11 +36,12 @@ public class KeyboardClient extends javax.swing.JFrame {
     private static int width = (int)size.getWidth();
     private static int height = (int) size.getHeight();
     private static String ipaddress = "172.17.74.44";
+    public static String ip_address;
     public static void main(String[] args) {
         try {
             Scanner in = new Scanner(System.in);
             System.out.println("Enter host's IP address: ");
-            String ip_address = in.nextLine();
+            ip_address = in.nextLine();
             clientSocket = new Socket(ip_address, 14444);
             objOutput = new ObjectOutputStream(clientSocket.getOutputStream());
             x = width / 2;
@@ -52,13 +53,6 @@ public class KeyboardClient extends javax.swing.JFrame {
                 new KeyboardClient().setVisible(true);
             }
         });
-        try {
-            
-            clientSocket = new Socket(ipaddress,14444);
-            objOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-            x = width / 2;
-            y = height / 2;
-        } catch (Exception e) {} ;
     }
      private void initComponents() {
 
@@ -80,6 +74,9 @@ public class KeyboardClient extends javax.swing.JFrame {
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 formMouseMoved(evt);
+            }
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                formMouseDragged(evt);
             }
         });
         addMouseListener(new java.awt.event.MouseAdapter() {
@@ -209,6 +206,13 @@ public class KeyboardClient extends javax.swing.JFrame {
             
         };
     }
+    private void formMouseDragged(java.awt.event.MouseEvent evt) {
+        try {
+            formMouseMoved(evt);
+        } catch (Exception e) {
+        
+        }
+    }
     private void formMouseWheel(java.awt.event.MouseWheelEvent evt) {
         try {
             int notches = evt.getWheelRotation();
@@ -221,7 +225,7 @@ public class KeyboardClient extends javax.swing.JFrame {
     }
     private void keepAlive() {
         try {
-            clientSocket = new Socket(ipaddress, 14444);
+            clientSocket = new Socket(ip_address, 14444);
             objOutput = new ObjectOutputStream(clientSocket.getOutputStream());
         } catch (Exception e) {
             System.out.println(e.toString());
