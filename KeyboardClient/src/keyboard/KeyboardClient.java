@@ -14,6 +14,7 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 import javax.swing.SwingUtilities;
 /**
  *
@@ -38,18 +39,23 @@ public class KeyboardClient extends javax.swing.JFrame {
     private static int width = (int)size.getWidth();
     private static int height = (int) size.getHeight();
     public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new KeyboardClient().setVisible(true);
-            }
-        });
+   
         try {
-            
-            clientSocket = new Socket("172.17.74.44", 14444);
+            Scanner in = new Scanner(System.in);
+            System.out.println("Enter host's IP address: ");
+            String ip_address = in.nextLine();
+            clientSocket = new Socket(ip_address, 14444);
             objOutput = new ObjectOutputStream(clientSocket.getOutputStream());
             x = width / 2;
             y = height / 2;
         } catch (Exception e) {} ;
+            
+        java.awt.EventQueue.invokeLater(new Runnable() {          
+            public void run() {
+                new KeyboardClient().setVisible(true);
+            }
+        });
+
     }
      private void initComponents() {
 
