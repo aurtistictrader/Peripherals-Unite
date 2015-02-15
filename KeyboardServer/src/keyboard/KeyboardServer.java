@@ -1,11 +1,14 @@
 package keyboard;
 
 import java.awt.AWTException;
+import java.awt.Dimension;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +18,8 @@ public class KeyboardServer {
     private static Socket clientSocket;
     private static ObjectInputStream objInput;
     private static Robot robot;
+    private static int x,y;
+    private static Dimension size;
     public static void main(String[] args) {
 
         try {
@@ -28,6 +33,10 @@ public class KeyboardServer {
         
         System.out.println("Server started. Listening to the port 14444");
 
+        size = Toolkit.getDefaultToolkit().getScreenSize();
+        x = (int) size.getWidth() / 2;
+        y = (int) size.getHeight() / 2;
+        robot.mouseMove(x, y);
         
         while (true) {
             try {
@@ -62,7 +71,35 @@ public class KeyboardServer {
                 break;
             case keyboard.cMouseEvent.MOUSEMOVE:
                 Point p = event.GetPoint();
-                robot.mouseMove(p.getX(), p.getY());
+                robot.mouseMove(x + p.getX(), y + p.getY());
+                x = x + p.getX();
+                y = y + p.getY();
+                break;
+            case keyboard.cMouseEvent.MOUSEDOWN:
+                switch (key) {
+                    case 0:
+                        robot.mousePress(InputEvent.BUTTON1_MASK);
+                        break;
+                    case 1:
+                        robot.mousePress(InputEvent.BUTTON3_MASK);
+                        break;
+                    case 2:
+                        robot.mousePress(InputEvent.BUTTON2_MASK);
+                        break;
+                }
+                break;
+            case keyboard.cMouseEvent.MOUSEUP:
+                switch (key) {
+                    case 0:
+                        robot.mouseRelease(InputEvent.BUTTON1_MASK);
+                        break;
+                    case 1:
+                        robot.mouseRelease(InputEvent.BUTTON3_MASK);
+                        break;
+                    case 2:
+                        robot.mouseRelease(InputEvent.BUTTON2_MASK);
+                        break;
+                }
                 break;
         }
     }

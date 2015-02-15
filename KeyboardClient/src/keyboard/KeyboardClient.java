@@ -14,6 +14,7 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import javax.swing.SwingUtilities;
 /**
  *
  * @author chengpeng123
@@ -128,12 +129,52 @@ public class KeyboardClient extends javax.swing.JFrame {
     }
    
     private void formMousePressed(java.awt.event.MouseEvent evt) {
-        
+        try {
+            Point t = new Point();
+            cMouseEvent socketEvent;
+            if (SwingUtilities.isLeftMouseButton(evt)) {
+                socketEvent = new cMouseEvent(cMouseEvent.MOUSEDOWN,t);
+                socketEvent.mkey = 0;
+                objOutput.writeObject(socketEvent);
+                keepAlive();
+            } else if (SwingUtilities.isRightMouseButton(evt)) {
+                socketEvent = new cMouseEvent(cMouseEvent.MOUSEDOWN,t);
+                socketEvent.mkey = 1;
+                objOutput.writeObject(socketEvent);
+                keepAlive();
+            } else if (SwingUtilities.isMiddleMouseButton(evt)) {
+                socketEvent = new cMouseEvent(cMouseEvent.MOUSEDOWN,t);
+                socketEvent.mkey = 2;
+                objOutput.writeObject(socketEvent);
+                keepAlive();
+            }
+        } catch (Exception e) {
+            
+        }
     }
     private void formMouseReleased(java.awt.event.MouseEvent evt) {
-//        try {
-//            if (evt.getID() == )
-//        }
+        try {
+            Point t = new Point();
+            cMouseEvent socketEvent;
+            if (SwingUtilities.isLeftMouseButton(evt)) {
+                socketEvent = new cMouseEvent(cMouseEvent.MOUSEUP,t);
+                socketEvent.mkey = 0;
+                objOutput.writeObject(socketEvent);
+                keepAlive();
+            } else if (SwingUtilities.isRightMouseButton(evt)) {
+                socketEvent = new cMouseEvent(cMouseEvent.MOUSEUP,t);
+                socketEvent.mkey = 1;
+                objOutput.writeObject(socketEvent);
+                keepAlive();
+            } else if (SwingUtilities.isRightMouseButton(evt)) {
+                socketEvent = new cMouseEvent(cMouseEvent.MOUSEUP,t);
+                socketEvent.mkey = 2;
+                objOutput.writeObject(socketEvent);
+                keepAlive();
+            }
+        } catch (Exception e) {
+            
+        }
     }
     private void formMouseMoved(java.awt.event.MouseEvent evt) {
         try {
