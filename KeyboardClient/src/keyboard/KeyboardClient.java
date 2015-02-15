@@ -137,13 +137,6 @@ public class KeyboardClient extends javax.swing.JFrame {
     }
     private void formMouseMoved(java.awt.event.MouseEvent evt) {
         try {
-//            System.out.println(evt.getX() + " : " + evt.getY());
-//            System.out.println(width);
-            if (    evt.getX() > width - 200 || 
-                    evt.getX() < 200 ||
-                    evt.getY() > height - 100 ||
-                    evt.getY() < 100 ){
-                
                 // send to server
                 Point t = new Point(evt.getX() - x, evt.getY()- y);
                 cMouseEvent socketEvent = new cMouseEvent(cMouseEvent.MOUSEMOVE,t);
@@ -152,11 +145,19 @@ public class KeyboardClient extends javax.swing.JFrame {
                 
                 x = evt.getX();
                 y = evt.getY();
-                // reset to middle
-                Robot robot = new Robot();
-                robot.mouseMove(width / 2, height / 2);
-                
-            }
+                if (    evt.getX() > width/2 || 
+                    evt.getX() < width/2 ||
+                    evt.getY() > height/2 ||
+                    evt.getY() < height/2 ){
+                    // reset to middle
+                    Robot robot = new Robot();
+                    robot.mouseMove(width / 2, height / 2);
+                    Point t2= new Point(evt.getX() - width / 2, evt.getY() - height/2); 
+                    cMouseEvent socketEvent2 = new cMouseEvent(cMouseEvent.MOUSEMOVE,t2);
+                    objOutput.writeObject(socketEvent2);
+                    keepAlive();
+                    
+                }
         } catch (Exception e) {
             
         };
