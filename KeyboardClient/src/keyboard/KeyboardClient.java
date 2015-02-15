@@ -22,6 +22,10 @@ public class KeyboardClient extends javax.swing.JFrame {
 
     KeyboardClient() {
         initComponents();
+//        this.addMouseMotionListener(new MouseAdapter() {
+//        
+//        });
+        
     }
     /**
      * @param args the command line arguments
@@ -63,7 +67,7 @@ public class KeyboardClient extends javax.swing.JFrame {
                 formKeyReleased(evt);
             }
         });
-        addMouseListener(new java.awt.event.MouseAdapter() {
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
             }
@@ -89,7 +93,8 @@ public class KeyboardClient extends javax.swing.JFrame {
         pack();
     }// </editor-fold> 
      
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {                                    
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {
+        this.setSize(width, height);
     }                                   
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) { 
@@ -132,6 +137,8 @@ public class KeyboardClient extends javax.swing.JFrame {
     }
     private void formMouseMoved(java.awt.event.MouseEvent evt) {
         try {
+//            System.out.println(evt.getX() + " : " + evt.getY());
+//            System.out.println(width);
             if (    evt.getX() > width - 200 || 
                     evt.getX() < 200 ||
                     evt.getY() > height - 100 ||
