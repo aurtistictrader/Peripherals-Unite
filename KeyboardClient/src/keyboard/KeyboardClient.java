@@ -7,6 +7,9 @@
 package keyboard;
 
 import java.awt.AWTEvent;
+import java.awt.Dimension;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.io.ObjectOutputStream;
@@ -25,6 +28,10 @@ public class KeyboardClient extends javax.swing.JFrame {
      */
     private static Socket clientSocket;
     private static ObjectOutputStream objOutput;
+    private static int x,y;
+    private static Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+    private static int width = (int)size.getWidth();
+    private static int height = (int) size.getHeight();
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -35,7 +42,8 @@ public class KeyboardClient extends javax.swing.JFrame {
             
             clientSocket = new Socket("172.17.74.44", 14444);
             objOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-            
+            x = width / 2;
+            y = height / 2;
         } catch (Exception e) {} ;
     }
      private void initComponents() {
@@ -53,6 +61,17 @@ public class KeyboardClient extends javax.swing.JFrame {
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 formKeyReleased(evt);
+            }
+        });
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                formMouseReleased(evt);
+            }
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
             }
         });
 
@@ -102,7 +121,39 @@ public class KeyboardClient extends javax.swing.JFrame {
             }
         } catch (Exception e) {} ;
     }
-    
+   
+    private void formMousePressed(java.awt.event.MouseEvent evt) {
+        
+    }
+    private void formMouseReleased(java.awt.event.MouseEvent evt) {
+//        try {
+//            if (evt.getID() == )
+//        }
+    }
+    private void formMouseMoved(java.awt.event.MouseEvent evt) {
+        try {
+            if (    evt.getX() > width - 200 || 
+                    evt.getX() < 200 ||
+                    evt.getY() > height - 100 ||
+                    evt.getY() < 100 ){
+                
+                // send to server
+                Point t = new Point(evt.getX() - x, evt.getY()- y);
+                cMouseEvent socketEvent = new cMouseEvent(cMouseEvent.MOUSEMOVE,t);
+                objOutput.writeObject(socketEvent);
+                keepAlive();
+                
+                x = evt.getX();
+                y = evt.getY();
+                // reset to middle
+                Robot robot = new Robot();
+                robot.mouseMove(width / 2, height / 2);
+                
+            }
+        } catch (Exception e) {
+            
+        };
+    }
     private void keepAlive() {
         try {
             clientSocket = new Socket("172.17.74.44", 14444);

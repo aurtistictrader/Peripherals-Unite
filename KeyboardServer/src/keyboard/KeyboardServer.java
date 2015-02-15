@@ -55,11 +55,14 @@ public class KeyboardServer {
         int key = event.GetKey();
         switch (event.GetType()) {
             case keyboard.cKeyEvent.KEY_DOWN:
-                
                 robot.keyPress(key);
                 break;
             case keyboard.cKeyEvent.KEY_UP:
                 robot.keyRelease(key);
+                break;
+            case keyboard.cMouseEvent.MOUSEMOVE:
+                Point p = event.GetPoint();
+                robot.mouseMove(p.getX(), p.getY());
                 break;
         }
     }

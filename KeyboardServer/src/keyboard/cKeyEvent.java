@@ -120,5 +120,8 @@ public class cKeyEvent extends cEvent {
     public int GetType () {
         return this.type;
     }
+    public Point GetPoint() {
+        return null;
+    }
 
 }
