@@ -1,9 +1,6 @@
-package keyboardserver;
+package keyboard;
 
-/**
- * Created by Michael on 2/14/2014.
- */
-public class KeyEvent extends Event {
+public class cKeyEvent extends cEvent {
     static final long serialVersionUID = 1L;
     private int type;
     private int key; // only set if type is key
@@ -64,7 +61,7 @@ public class KeyEvent extends Event {
     public static final int	KEY_UP = 1;
     public static final int	KEY_MOVE = 2;
 
-    KeyEvent ( int type, int c ) {
+    cKeyEvent ( int type, int c ) {
         this.key = c;
         this.type = type;
     }

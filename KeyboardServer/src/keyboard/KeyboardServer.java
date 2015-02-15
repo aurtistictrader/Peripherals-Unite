@@ -1,4 +1,4 @@
-package keyboardserver;
+package keyboard;
 
 import java.awt.AWTException;
 import java.io.IOException;
@@ -34,7 +34,8 @@ public class KeyboardServer {
  
                 clientSocket = serverSocket.accept();   //accept the client connection
                 objInput = new ObjectInputStream(clientSocket.getInputStream());
-                Event event = (Event) objInput.readObject();
+                cEvent event = (cEvent) objInput.readObject();
+                System.out.println(event.GetKey());
                 initiateAction(event);
                 
                 objInput.close();
@@ -42,19 +43,21 @@ public class KeyboardServer {
 
             } catch (IOException ex) {
                 System.out.println("Problem in message reading");
+                System.out.println(ex.toString());
             } catch (ClassNotFoundException cx) {
                 cx.printStackTrace();
+                System.out.println(cx.toString());
             }
         }
     }
     
-    private static void initiateAction(Event event) {
+    private static void initiateAction(cEvent event) {
         int key = event.GetKey();
         switch (event.GetType()) {
-            case keyboardserver.KeyEvent.KEY_DOWN:
+            case keyboard.cKeyEvent.KEY_DOWN:
                 robot.keyPress(key);
                 break;
-            case keyboardserver.KeyEvent.KEY_UP:
+            case keyboard.cKeyEvent.KEY_UP:
                 robot.keyRelease(key);
                 break;
         }
