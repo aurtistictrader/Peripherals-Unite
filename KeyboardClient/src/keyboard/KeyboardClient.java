@@ -12,6 +12,7 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseWheelEvent;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
@@ -24,10 +25,6 @@ public class KeyboardClient extends javax.swing.JFrame {
 
     KeyboardClient() {
         initComponents();
-//        this.addMouseMotionListener(new MouseAdapter() {
-//        
-//        });
-        
     }
     /**
      * @param args the command line arguments
@@ -38,8 +35,8 @@ public class KeyboardClient extends javax.swing.JFrame {
     private static Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private static int width = (int)size.getWidth();
     private static int height = (int) size.getHeight();
+    private static String ipaddress = "172.17.74.44";
     public static void main(String[] args) {
-   
         try {
             Scanner in = new Scanner(System.in);
             System.out.println("Enter host's IP address: ");
@@ -49,13 +46,19 @@ public class KeyboardClient extends javax.swing.JFrame {
             x = width / 2;
             y = height / 2;
         } catch (Exception e) {} ;
-            
-        java.awt.EventQueue.invokeLater(new Runnable() {          
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new KeyboardClient().setVisible(true);
             }
         });
-
+        try {
+            
+            clientSocket = new Socket(ipaddress,14444);
+            objOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+            x = width / 2;
+            y = height / 2;
+        } catch (Exception e) {} ;
     }
      private void initComponents() {
 
@@ -87,6 +90,11 @@ public class KeyboardClient extends javax.swing.JFrame {
                 formMouseReleased(evt);
             }
         });
+        addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                formMouseWheel(e);
+            }
+        });
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -111,26 +119,16 @@ public class KeyboardClient extends javax.swing.JFrame {
                 cKeyEvent socketEvent = new cKeyEvent(0,evt.getKeyCode());
                 objOutput.writeObject(socketEvent);
                 keepAlive();
-//            objOutput.close();
-//            clientSocket.close();
-            } else if (evt.getID() == KeyEvent.KEY_RELEASED) {
-//                cKeyEvent socketEvent = new cKeyEvent(1,evt.getKeyCode());
-//                objOutput.writeObject(socketEvent);
-            }
+            } 
         } catch (Exception e) {} ;
     }                               
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {
         try {
-            if(evt.getID() == KeyEvent.KEY_PRESSED) {
-    //            cKeyEvent socketEvent = new cKeyEvent(0,evt.getKeyCode());
-    //            objOutput.writeObject(socketEvent);
-            } else if (evt.getID() == KeyEvent.KEY_RELEASED) {
+            if (evt.getID() == KeyEvent.KEY_RELEASED) {
                 cKeyEvent socketEvent = new cKeyEvent(1,evt.getKeyCode());
                 objOutput.writeObject(socketEvent);
                 keepAlive();
-//            objOutput.close();
-//            clientSocket.close();
             }
         } catch (Exception e) {} ;
     }
@@ -195,9 +193,9 @@ public class KeyboardClient extends javax.swing.JFrame {
                 x = evt.getX();
                 y = evt.getY();
                 if (    evt.getX() > width/2 || 
-                    evt.getX() < width/2 ||
-                    evt.getY() > height/2 ||
-                    evt.getY() < height/2 ){
+                        evt.getX() < width/2 ||
+                        evt.getY() > height/2 ||
+                        evt.getY() < height/2 ){
                     // reset to middle
                     Robot robot = new Robot();
                     robot.mouseMove(width / 2, height / 2);
@@ -211,9 +209,19 @@ public class KeyboardClient extends javax.swing.JFrame {
             
         };
     }
+    private void formMouseWheel(java.awt.event.MouseWheelEvent evt) {
+        try {
+            int notches = evt.getWheelRotation();
+            cMouseWheelEvent socketEvent = new cMouseWheelEvent(cMouseWheelEvent.SCROLL, notches);
+            objOutput.writeObject(socketEvent);
+            keepAlive();
+        } catch (Exception e) {
+            
+        }
+    }
     private void keepAlive() {
         try {
-            clientSocket = new Socket("172.17.74.44", 14444);
+            clientSocket = new Socket(ipaddress, 14444);
             objOutput = new ObjectOutputStream(clientSocket.getOutputStream());
         } catch (Exception e) {
             System.out.println(e.toString());

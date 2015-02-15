@@ -101,6 +101,9 @@ public class KeyboardServer {
                         break;
                 }
                 break;
+            case keyboard.cMouseWheelEvent.SCROLL:
+                robot.mouseWheel(key);
+                break;
         }
     }
 }
