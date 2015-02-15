@@ -69,17 +69,18 @@ public class KeyboardClient extends javax.swing.JFrame {
             }
         });
         addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
+        });
+        addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 formMouseReleased(evt);
             }
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                formMouseMoved(evt);
-            }
         });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -148,6 +149,7 @@ public class KeyboardClient extends javax.swing.JFrame {
                 objOutput.writeObject(socketEvent);
                 keepAlive();
             }
+            
         } catch (Exception e) {
             
         }
@@ -166,7 +168,7 @@ public class KeyboardClient extends javax.swing.JFrame {
                 socketEvent.mkey = 1;
                 objOutput.writeObject(socketEvent);
                 keepAlive();
-            } else if (SwingUtilities.isRightMouseButton(evt)) {
+            } else if (SwingUtilities.isMiddleMouseButton(evt)) {
                 socketEvent = new cMouseEvent(cMouseEvent.MOUSEUP,t);
                 socketEvent.mkey = 2;
                 objOutput.writeObject(socketEvent);
