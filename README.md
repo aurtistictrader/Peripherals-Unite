@@ -8,6 +8,7 @@ When compiling, use the server IP address for connection
 
 To exit press Alt+F4
 
+# License
 The MIT License (MIT)
 
 Copyright (c) 2015 Cheng Peng
