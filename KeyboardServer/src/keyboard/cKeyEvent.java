@@ -56,6 +56,10 @@ public class cKeyEvent extends cEvent {
     public static final int	VK_UP = 38;
     public static final int	VK_LEFT = 37;
     public static final int	VK_RIGHT = 39;
+    public static final int KEY_DOWN = 0;
+    public static final int KEY_UP = 1;
+    public static final int KEY_MOVE = 2;
+
     public static final int     VK_CONTROL = 17;
     public static final int     VK_BACK_SPACE = 8;
     public static final int     VK_SHIFT = 16;
@@ -95,15 +99,6 @@ public class cKeyEvent extends cEvent {
     public static final int     VK_CLOSE_BRACKET = 221;
     public static final int     VK_SINGLE_QUOTE = 222;
     
-    
-    
-    
-    
-    
-    public static final int	KEY_DOWN = 0;
-    public static final int	KEY_UP = 1;
-    public static final int	KEY_MOVE = 2;
-
     cKeyEvent ( int type, int c ) {
         this.key = c;
         this.type = type;
